@@ -50,7 +50,7 @@ const Sample = () => {
   }
 
   const renderAll = (i) => {
-    return (<Squares value={squares[i]} onClick={() => handleClick(i)}/>)
+    return (<Squares  dark={dark} value={squares[i]} onClick={() => handleClick(i)}/>)
    }
 
 
@@ -58,9 +58,24 @@ const Sample = () => {
      setIsX(true)
      setSquares(Array(9).fill(null))
    }
- 
+
+   //Dark mode setup
+   /*First, you need to create a state hook to hold the value of whether the background color is dark or not */
+   const [dark, setDark] = useState(false); //set to false first
+   /*Second, you need to create an object style which we want to set the backgroundcolor of either light or dark mode */
+   const theme = {
+    backgroundColor: dark ? '#24252a' : '#0000',
+    transition:' all 0.4s ease-in-out'
+   }
+   //Then the last is we have to create a button that has a onclick function and inside of the function we set the state to dark or light and 
+   //vice versa, then put the style on inline
+   const setTheme = () => {
+     setDark(!dark)
+   }
   return (
-    <div className='h-screen justify-center items-center flex flex-col'>
+    <>
+     <div className='absolute top-0'><button onClick={setTheme} className='mt-4 ml-5 bg-slate-400 p-2 rounded-md text-white active:bg-slate-300 transition-all'>{dark ? 'Light mode' : 'Dark mode'}</button></div>
+    <div style={theme} className='h-screen justify-center items-center flex flex-col'>
         <div className='flex flex-row '>
           {renderAll (0)}
           {renderAll (1)}
@@ -76,9 +91,11 @@ const Sample = () => {
           {renderAll (7)}
           {renderAll (8)}
         </div>
-      <div className='mt-4 text-3xl'>{status}</div>
+      <div className='mt-4 text-3xl transition-all' style={dark  ?  {color: 'white'} : {}}>{status}</div>
      {winner ? (<button onClick={handleRestart} className='w-40 bg-green-500 text-white p-2 mt-4 rounded-md'>Restart</button>) : ('')}
     </div>
+
+  </>
   )
 }
 
